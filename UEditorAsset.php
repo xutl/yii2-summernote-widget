@@ -15,7 +15,7 @@ use yii\web\AssetBundle;
  */
 class UEditorAsset extends AssetBundle
 {
-    public $sourcePath = '@vendor/xutl/yii2-summernote--widget/assets';
+    public $sourcePath = '@vendor/xutl/yii2-summernote-widget/assets';
 
     public $js = [
         'summernote.min.js',
