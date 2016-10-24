@@ -37,10 +37,8 @@ class UEditor extends InputWidget
         }
 
         $this->clientOptions = array_merge([
-            'autoHeightEnabled' => true,
-            'initialFrameWidth' => '100%',
-            'initialFrameHeight' => '300',
-            'lang' => Yii::$app->language == 'zh-CN' ? 'zh-cn' : 'en',
+            'height' => 180,
+            'placeholder' => true,
         ], $this->clientOptions);
     }
 
