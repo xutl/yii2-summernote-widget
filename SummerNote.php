@@ -49,11 +49,13 @@ class SummerNote extends InputWidget
         } else {
             echo Html::textArea($this->name, $this->value, $this->options);
         }
-
         $view = $this->getView();
         SummerNoteAsset::register($view);
         $assetBundle = SummerNoteLanguageAsset::register($view);
         $assetBundle->language = $language;
+        if ($language != 'en-US') {
+            $this->clientOptions['lang'] = $language;
+        }
         $options = empty ($this->clientOptions) ? '' : Json::htmlEncode($this->clientOptions);
         $this->view->registerJs("jQuery(\"#{$this->options['id']}\").summernote({$options});");
     }
