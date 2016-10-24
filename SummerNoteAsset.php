@@ -13,7 +13,7 @@ use yii\web\AssetBundle;
  * Class UEditorAsset
  * @package xutl\ueditor
  */
-class UEditorAsset extends AssetBundle
+class SummerNoteAsset extends AssetBundle
 {
     public $sourcePath = '@vendor/xutl/yii2-summernote-widget/assets';
 
