@@ -7,8 +7,10 @@
 namespace xutl\summernote;
 
 use Yii;
+use yii\helpers\Url;
 use yii\helpers\Json;
 use yii\helpers\Html;
+use yii\web\JsExpression;
 use yii\widgets\InputWidget;
 
 /**
@@ -19,6 +21,7 @@ class SummerNote extends InputWidget
 {
 
     public $language;
+    public $uploadUrl;
     public $clientOptions = [];
 
     /**
@@ -55,6 +58,18 @@ class SummerNote extends InputWidget
         $assetBundle->language = $language;
         if ($language != 'en-US') {
             $this->clientOptions['lang'] = $language;
+        }
+        if (!empty($this->uploadUrl)) {
+            $this->clientOptions['onImageUpload'] = new JsExpression("
+            function(files, editor, welEditable) {              
+                    data = new FormData();data.append(\"file\", files[0]);
+    jQuery.ajax({data: data,type: \"POST\",dataType : 'text',url: \"".Url::to($this->uploadUrl)."\",cache: false,contentType: false,processData: false,
+        success: function(url) {
+            jQuery('#{$this->options['id']}').summernote('editor.insertImage', url);
+        }
+});
+                }
+            ");
         }
         $options = empty ($this->clientOptions) ? '' : Json::htmlEncode($this->clientOptions);
         $this->view->registerJs("jQuery(\"#{$this->options['id']}\").summernote({$options});");

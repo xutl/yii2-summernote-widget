@@ -19,6 +19,7 @@ class SummerNoteAsset extends AssetBundle
 
     public $js = [
         'summernote.min.js',
+        'upload.js'
     ];
 
     public $css = [
