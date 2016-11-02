@@ -32,7 +32,7 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use xutl\summernote\SummerNoteAction;
-class MyVoteController extends Controller
+class MyController extends Controller
 {
     public function actions()
     {
