@@ -37,6 +37,9 @@ class SummerNote extends InputWidget
 
         $this->clientOptions = array_merge([
             'height' => 180,
+//            'toolbar'=>[
+//                'insert',['gxcode']
+//            ],
             'placeholder' => 'write here...',
             'codemirror'=>[
                 'mode'=>'text/html',
@@ -44,7 +47,6 @@ class SummerNote extends InputWidget
                 'lineNumbers'=>true,
                 'theme'=>'monokai'
             ],
-
 
         ], $this->clientOptions);
     }
@@ -64,6 +66,7 @@ class SummerNote extends InputWidget
         SummerNoteAsset::register($view);
         $assetBundle = SummerNoteLanguageAsset::register($view);
         $assetBundle->language = $language;
+        $this->clientOptions['lang'] = $language;
         if (!empty($this->uploadUrl)) {
             $this->clientOptions['callbacks']['onImageUpload'] = new JsExpression("function(files) {for (var i = files.length - 1; i >= 0; i--) {var data = new FormData();data.append(\"file\", files[i]);jQuery.ajax({cache: false,contentType: false,processData: false,data: data,type: \"POST\",dataType : \"json\",url: \"".Url::to($this->uploadUrl)."\",success: function(res) {jQuery(\"#{$this->options['id']}\").summernote('insertImage',  res.url, res.originalName);}});}}");
         }
