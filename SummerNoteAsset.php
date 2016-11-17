@@ -19,6 +19,7 @@ class SummerNoteAsset extends AssetBundle
 
     public $js = [
         'summernote.min.js',
+        'plugin/codewrapper/summernote-ext-codewrapper.min.js',
     ];
 
     public $css = [
@@ -28,6 +29,6 @@ class SummerNoteAsset extends AssetBundle
     public $depends = [
         'yii\web\JqueryAsset',
         'yii\bootstrap\BootstrapAsset',
-        'yii\bootstrap\BootstrapPluginAsset'
+        'yii\bootstrap\BootstrapPluginAsset',
     ];
 }

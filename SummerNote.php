@@ -37,16 +37,23 @@ class SummerNote extends InputWidget
 
         $this->clientOptions = array_merge([
             'height' => 180,
-//            'toolbar'=>[
-//                'insert',['gxcode']
-//            ],
-            'placeholder' => 'write here...',
-            'codemirror'=>[
-                'mode'=>'text/html',
-                'htmlMode'=>true,
-                'lineNumbers'=>true,
-                'theme'=>'monokai'
+           'toolbar'=>[
+               ['style',['style']],
+               ['font', ['bold', 'underline', 'clear']],
+               ['fontname', ['fontname']],
+               ['color', ['color']],
+               ['para', ['ul', 'ol', 'paragraph']],
+               ['table', ['table']],
+               ['insert', ['gxcode','link', 'picture', 'video']],
+               ['view', ['fullscreen', 'codeview', 'help']]
             ],
+            'placeholder' => 'write here...',
+//            'codemirror' => [
+//                'mode' => 'text/html',
+//                'htmlMode' => true,
+//                'lineNumbers' => true,
+//                'theme' => 'monokai'
+//            ],
 
         ], $this->clientOptions);
     }
@@ -68,7 +75,7 @@ class SummerNote extends InputWidget
         $assetBundle->language = $language;
         $this->clientOptions['lang'] = $language;
         if (!empty($this->uploadUrl)) {
-            $this->clientOptions['callbacks']['onImageUpload'] = new JsExpression("function(files) {for (var i = files.length - 1; i >= 0; i--) {var data = new FormData();data.append(\"file\", files[i]);jQuery.ajax({cache: false,contentType: false,processData: false,data: data,type: \"POST\",dataType : \"json\",url: \"".Url::to($this->uploadUrl)."\",success: function(res) {jQuery(\"#{$this->options['id']}\").summernote('insertImage',  res.url, res.originalName);}});}}");
+            $this->clientOptions['callbacks']['onImageUpload'] = new JsExpression("function(files) {for (var i = files.length - 1; i >= 0; i--) {var data = new FormData();data.append(\"file\", files[i]);jQuery.ajax({cache: false,contentType: false,processData: false,data: data,type: \"POST\",dataType : \"json\",url: \"" . Url::to($this->uploadUrl) . "\",success: function(res) {jQuery(\"#{$this->options['id']}\").summernote('insertImage',  res.url, res.originalName);}});}}");
         }
         $options = empty ($this->clientOptions) ? '' : Json::htmlEncode($this->clientOptions);
         $this->view->registerJs("jQuery(\"#{$this->options['id']}\").summernote({$options});");
