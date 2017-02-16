@@ -21,7 +21,7 @@ class SummerNote extends InputWidget
 {
 
     public $language;
-    public $uploadUrl;
+    public $uploadUrl = '/attachment/upload/sn-upload';
     public $clientOptions = [];
 
     /**

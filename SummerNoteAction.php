@@ -50,7 +50,7 @@ class SummerNoteAction extends Action
     /**
      * Runs the action.
      * This method displays the view requested by the user.
-     * @throws HttpException if the view is invalid
+     * @param null $callback
      */
     public function run($callback = null)
     {
