@@ -9,23 +9,20 @@ namespace xutl\summernote;
 use Yii;
 use yii\base\Action;
 use yii\helpers\Json;
-use yii\web\UploadedFile;
-use yii\validators\FileValidator;
+use yuncms\attachment\ModuleTrait;
+use yuncms\attachment\components\Uploader;
 
 /**
  * SummerNoteAction class file.
  */
 class SummerNoteAction extends Action
 {
+    use ModuleTrait;
+
     /**
      * @var string file input name.
      */
     public $inputName = 'file';
-
-    /**
-     * @var callable success callback with signature: `function($filename, $params)`
-     */
-    public $onComplete;
 
     /**
      * Initializes the action and ensures the temp path exists.
@@ -54,34 +51,35 @@ class SummerNoteAction extends Action
      */
     public function run($callback = null)
     {
-        $uploadedFile = UploadedFile::getInstanceByName($this->inputName);
-        $params = Yii::$app->request->getBodyParams();
-        $validator = new FileValidator([
-            'extensions' => 'gif, jpg, jpeg, png, bmp',
+        $fieldName = $this->inputName;
+        $config = [
+            'maxFiles' => 1,
+            'extensions' => $this->getModule()->imageAllowFiles,
             'checkExtensionByMimeType' => true,
             'mimeTypes' => 'image/*',
-            "maxSize" => static::getPHPMaxUploadSize() * 1048576,
+            "maxSize" => $this->getModule()->getMaxUploadByte(),
+        ];
+        $uploader = new Uploader([
+            'fileField' => $fieldName,
+            'config' => $config,
         ]);
-        if (!$validator->validate($uploadedFile, $error)) {
+        $uploader->upFile();
+        $res = $uploader->getFileInfo();
+        if ($res['state'] == 'SUCCESS') {
             $result = [
-                'state' => $error,
+                "originalName" => $res['original'],
+                "name" => $res['title'],
+                "url" => $res['url'],
+                "size" => $res['size'],
+                "type" => $res['type'],
+                "state" => 'SUCCESS'
             ];
         } else {
-            if ($this->onComplete && ($url = call_user_func($this->onComplete, $uploadedFile, $params)) != false) {
-                $result = [
-                    "originalName" => $uploadedFile->name,
-                    "name" => basename($url),
-                    "url" => $url,
-                    "size" => $uploadedFile->size,
-                    "type" => '.' . $uploadedFile->extension,
-                    "state" => 'SUCCESS'
-                ];
-            } else {
-                $result = [
-                    "state" => Yii::t('app', 'File save failed'),
-                ];
-            }
+            $result = [
+                "state" => Yii::t('app', 'File save failed'),
+            ];
         }
+
         if (is_null($callback)) {
             echo Json::encode($result);
         } else {
