@@ -4,6 +4,7 @@
  * @copyright Copyright (c) 2012 TintSoft Technology Co. Ltd.
  * @license http://www.tintsoft.com/license/
  */
+
 namespace xutl\summernote;
 
 use Yii;
@@ -31,31 +32,56 @@ class SummerNote extends InputWidget
     public function init()
     {
         parent::init();
+        $this->registerTranslations();
         if (!isset ($this->options ['id'])) {
             $this->options ['id'] = $this->getId();
         }
-
         $this->clientOptions = array_merge([
             'height' => 180,
-           'toolbar'=>[
-               ['style',['style']],
-               ['font', ['bold', 'underline', 'clear']],
-               ['fontname', ['fontname']],
-               ['color', ['color']],
-               ['para', ['ul', 'ol', 'paragraph']],
-               ['table', ['table']],
-               ['insert', ['gxcode','link', 'picture', 'video']],
-               ['view', ['fullscreen', 'codeview', 'help']]
+            'toolbar' => [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['gxcode', 'link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
             ],
-            'placeholder' => 'write here...',
+            'placeholder' => self::t('write here...'),
 //            'codemirror' => [
 //                'mode' => 'text/html',
 //                'htmlMode' => true,
 //                'lineNumbers' => true,
 //                'theme' => 'monokai'
 //            ],
-
         ], $this->clientOptions);
+    }
+
+    /**
+     * 注册语言包
+     */
+    public function registerTranslations()
+    {
+        Yii::$app->i18n->translations['xutl/summernote/*'] = [
+            'class' => 'yii\i18n\PhpMessageSource',
+            'sourceLanguage' => 'en-US',
+            'basePath' => __DIR__ . '/messages',
+            'fileMap' => [
+                'xutl/summernote/summernote' => 'summernote.php',
+            ],
+        ];
+    }
+
+    /**
+     * 获取语言包
+     * @param string $message
+     * @param array $params
+     * @return string
+     */
+    public static function t($message, $params = [])
+    {
+        return Yii::t('xutl/summernote/summernote', $message, $params);
     }
 
     /**

@@ -9,7 +9,6 @@ namespace xutl\summernote;
 use Yii;
 use yii\base\Action;
 use yii\helpers\Json;
-use yuncms\attachment\ModuleTrait;
 use yuncms\attachment\components\Uploader;
 
 /**
@@ -17,8 +16,6 @@ use yuncms\attachment\components\Uploader;
  */
 class SummerNoteAction extends Action
 {
-    use ModuleTrait;
-
     /**
      * @var string file input name.
      */
@@ -34,14 +31,24 @@ class SummerNoteAction extends Action
     }
 
     /**
+     * 返回允许上传的最大大小单位 MB
      * @return int the max upload size in MB
      */
-    public static function getPHPMaxUploadSize()
+    public function getMaxUploadSize()
     {
-        $max_upload = (int)(ini_get('upload_max_filesize'));
-        $max_post = (int)(ini_get('post_max_size'));
-        $memory_limit = (int)(ini_get('memory_limit'));
-        return min($max_upload, $max_post, $memory_limit);
+        $maxUpload = (int)(ini_get('upload_max_filesize'));
+        $maxPost = (int)(ini_get('post_max_size'));
+        $memoryLimit = (int)(ini_get('memory_limit'));
+        return min($maxUpload, $maxPost, $memoryLimit);
+    }
+
+    /**
+     * 返回允许上传的最大大小单位 Byte
+     * @return int the max upload size in Byte
+     */
+    public function getMaxUploadByte()
+    {
+        return $this->getMaxUploadSize() * 1024 * 1024;
     }
 
     /**
@@ -54,10 +61,10 @@ class SummerNoteAction extends Action
         $fieldName = $this->inputName;
         $config = [
             'maxFiles' => 1,
-            'extensions' => $this->getModule()->imageAllowFiles,
+            'extensions' => 'png,jpg,jpeg,gif,bmp',
             'checkExtensionByMimeType' => true,
             'mimeTypes' => 'image/*',
-            "maxSize" => $this->getModule()->getMaxUploadByte(),
+            "maxSize" => $this->getMaxUploadByte(),
         ];
         $uploader = new Uploader([
             'fileField' => $fieldName,
